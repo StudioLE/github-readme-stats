@@ -47,6 +47,7 @@ async function fetchTopLanguages(username, langsCount = 5, exclude_repo = []) {
   }
 
   let repoNodes = res.data.data.user.repositories.nodes;
+
   let repoToHide = {};
 
   // populate repoToHide map for quick lookup
@@ -63,6 +64,13 @@ async function fetchTopLanguages(username, langsCount = 5, exclude_repo = []) {
     .filter((name) => {
       return !repoToHide[name.name];
     });
+
+  const repoNamesArray = repoNodes
+    .map(repo => repo.name)
+    .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+  const repoNames = repoNamesArray.join("\n")
+  console.log(`Publishing language stats for ${repoNamesArray.length} repositories`)
+  console.log(repoNames)
 
   repoNodes = repoNodes
     .filter((node) => {
