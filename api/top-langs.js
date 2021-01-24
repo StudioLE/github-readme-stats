@@ -1,5 +1,6 @@
 require("dotenv").config();
 const {
+  logger,
   renderError,
   clampValue,
   parseBoolean,
@@ -72,7 +73,7 @@ module.exports = async (req, res) => {
       }),
     );
   } catch (err) {
-    console.error(err)
+    logger.error(err)
     return res.send(renderError(err.message, err.secondaryMessage));
   }
 };

@@ -1,8 +1,27 @@
 require('dotenv').config()
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3")
 const s3 = new S3Client()
+const { logger } = require("./src/common/utils");
 const stats = require('./api/index')
 const langs = require('./api/top-langs')
+process.env.NODE_ENV = 'test'
+
+const requiredEnv = [
+  "PAT_1", 
+  "STATS",
+  "LANGS",
+  "AWS_ACCESS_KEY_ID",
+  "AWS_SECRET_ACCESS_KEY",
+  "AWS_REGION",
+  "AWS_BUCKET_NAME"
+];
+
+const missingEnv = requiredEnv.filter(key => !process.env[key])
+
+if(missingEnv.length > 0) {
+  logger.error("The following variables must be set in .env:", missingEnv)
+  process.exit()
+}
 
 const saveToS3 = async (path, svg) => {
   const bucket = process.env.AWS_BUCKET_NAME
@@ -15,10 +34,10 @@ const saveToS3 = async (path, svg) => {
 
   try {
     await s3.send(new PutObjectCommand(obj))
-    console.log(`Successfully uploaded to ${bucket}/${path}`)
+    logger.log(`Successfully uploaded to ${bucket}/${path}`)
   }
   catch (err) {
-    console.log("Error", err)
+    logger.log("Error", err)
   }
 }
 
@@ -39,18 +58,18 @@ const langsRes = {
   send: (svg) => saveToS3("langs", svg)
 }
 
-console.log(statsReq)
-console.log(langsReq)
+logger.log(statsReq)
+logger.log(langsReq)
 try{
   stats(statsReq, statsRes)
 }
 catch (err) {
-  console.log(err)
+  logger.log(err)
 }
 try{
   langs(langsReq, langsRes)
 }
 catch (err) {
-  console.log(err)
+  logger.log(err)
 }
 
