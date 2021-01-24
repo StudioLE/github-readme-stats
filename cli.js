@@ -4,7 +4,6 @@ const s3 = new S3Client()
 const { logger } = require("./src/common/utils");
 const stats = require('./api/index')
 const langs = require('./api/top-langs')
-process.env.NODE_ENV = 'test'
 
 const requiredEnv = [
   "PAT_1", 

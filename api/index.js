@@ -77,7 +77,7 @@ module.exports = async (req, res) => {
         custom_title,
         locale: locale ? locale.toLowerCase() : null,
         disable_animations: parseBoolean(disable_animations),
-      }),
+      })
     );
   } catch (err) {
     logger.error(err)

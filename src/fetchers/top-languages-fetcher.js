@@ -69,8 +69,8 @@ async function fetchTopLanguages(username, langsCount = 5, exclude_repo = []) {
     .map(repo => repo.name)
     .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
   const repoNames = repoNamesArray.join("\n")
-  console.log(`Publishing language stats for ${repoNamesArray.length} repositories`)
-  console.log(repoNames)
+  logger.log(`Publishing language stats for ${repoNamesArray.length} repositories`)
+  logger.log(repoNames)
 
   repoNodes = repoNodes
     .filter((node) => {
