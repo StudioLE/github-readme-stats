@@ -33,8 +33,8 @@ const saveToS3 = async (path, svg) => {
   }
 
   try {
-    await s3.send(new PutObjectCommand(obj))
-    logger.log(`Successfully uploaded to ${bucket}/${path}`)
+    let s3Res = await s3.send(new PutObjectCommand(obj))
+    logger.log(`Pushed to https://${bucket}.s3-${process.env.AWS_REGION}.amazonaws.com/${path}`)
   }
   catch (err) {
     logger.log("Error", err)
@@ -58,8 +58,8 @@ const langsRes = {
   send: (svg) => saveToS3("langs", svg)
 }
 
-logger.log(statsReq)
-logger.log(langsReq)
+logger.log("Creating stats with config: ", statsReq)
+logger.log("Creating langs with config: ", langsReq)
 try{
   stats(statsReq, statsRes)
 }
